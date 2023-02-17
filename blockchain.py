@@ -6,6 +6,8 @@ import hashlib
 
 import utils
 
+MINING_DIFFICULTY = 3
+
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
 
@@ -31,6 +33,16 @@ class BlockChain(object):
         # json object sort
         sorted_block = json.dumps(block, sort_keys=True)
         return hashlib.sha256(sorted_block.encode()).hexdigest()
+
+    def add_transaction(self, sender_blockchain_address,
+                        recipient_blockchain_address, value):
+        transaction = utils.sorted_dict_by_key({
+            'sender_blockchain_address': sender_blockchain_address,
+            'recipient_blockchain_address': recipient_blockchain_address,
+            'value': float(value)
+        })
+        self.transaction_pool.append(transaction)
+        return True
 
 
 def pprint(chains):
